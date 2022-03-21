@@ -1,11 +1,9 @@
----
-__Gag__
+## Gag
 
 Throughout humankind, from caveman, to philosophers, to scientists, the question of: How could one have enough computer resources to run two 4K videos streams and the latest AAA video-game on max settings while also having a web irc client running on the side? That's preposterous!
 
 Not anymore! Introducing: a simple WebAssembly IRC client, finally you can manage your resources without dropping any frames!
 
----
 
 
 ## Project
