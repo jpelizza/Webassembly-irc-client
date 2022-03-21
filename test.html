@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <ul id="list">
+  </ul>
+  <input type='text' id='idea' />
+  <input type='button' value='send' id='add' onclick="send_msg()" ; />
+
+</body>
+
+<script src="./wasm_irc.js">/*IMPORT*/</script>
+<script>
+  // STARTUP AND CONFIG
+  channel = "#chan";
+  nickname = "nickname";
+
+  function login() {
+    m.then((result) => {
+      let id = setInterval(() => {
+        let i = result.ccall('wsirc_login', ["number"], [], []);
+        console.log(i)
+        config_conn(channel, nickname);
+        if (i == 0) clearInterval(id);
+      }, 1000);
+    })
+  }
+
+  function config_conn(chan, nick) {
+    m.then((result) => {
+      result.ccall('wsirc_config', null, ["string", "string"], [chan, nick]);
+    })
+  }
+
+  async function init() {
+    const module = await Module();
+    return module;
+  }
+  const m = init();
+</script>
+
+<script>
+  // FUNCTIONS TO BE CALLED WHILE RUNNING
+  function send_msg(msg) {
+    m.then((result) => {
+      msg = document.getElementById('idea').value;
+      result.ccall('wsirc_send_msg', null, ["string"], [msg]);
+      recv_msg(msg);
+    })
+  }
+
+  function recv_msg(msg) {
+    var ul = document.getElementById("list");
+    var li = document.createElement("li");
+    li.appendChild(document.createTextNode(msg));
+    ul.appendChild(li);
+  }
+
+
+  function get_user_list() {
+    m.then((result) => {
+      result.ccall('wsirc_send_msg', ["string"], [], []);
+    })
+  }
+
+
+</script>
+
+
+</html>
