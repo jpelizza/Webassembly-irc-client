@@ -12,11 +12,14 @@ Not anymore! Introducing: a simple WebAssembly IRC client, finally you can manag
 This is an in-progress web socket IRC client written in C and compiled to WebAssembly, it's supposed to be single channel.
 Objectives as of now are configuring desired channel and nickname and having functionalities as far as receiving and sending messages.
 
-#### What I hope to accomplish:
+#### How I ended up making this:
 I really like streaming websites, I really dislike depending on other's services to stream.
 While programming my own forum with streaming capabilities using [CPPCMS](https://github.com/artyom-beilis) I encountered an issue, I couldn't find a simple web client, most of them use bouncers and gateways and honestly it seemed a bit overwhelming to use for something as simple as a one channel, send and receive message client on my website.
 
 I turned this issue on a opportunity to learn WebAssembly using [Emscripten](https://github.com/emscripten-core/emscripten).
+
+#### What I hope to accomplish:
+An IRC web client not unlike one seen on twitch, youtube and dlive.
 
 
 ## How to get it running
