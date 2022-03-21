@@ -62,6 +62,7 @@ to access your python server such as:
 
 + Use arguments to connect to the server on webassembly, using argc and argv is simples but I'm not yet sure on how to set arguments on JS's Module call yet. 
 + Comment code.
++ Build a better Makefile, right now it's a glorified static shell call.
 + Refactor parser
   - such as no more need for `parse_login`. 
   - maybe set `fill`'s content to parse_irc
