@@ -64,7 +64,7 @@ to access your python server such as:
 + ~~Comment code.~~
 + Build a better Makefile, right now it's a glorified static shell call.
 + Refactor parser
-  - such as no more need for `parse_login`. 
+  - ~~such as no more need for `parse_login`~~. 
   - ~~maybe set `fill`'s content to parse_irc~~
   - ~~take out `emscripten_run_script` out of parser, as it's supposed to only parse message into struct `p_info`, let all messages handling be made by `onmessage` or create another handler that responds if needed~~
 + Make a better user interface on html+js end.

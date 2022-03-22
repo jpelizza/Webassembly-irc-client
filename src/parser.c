@@ -1,19 +1,6 @@
 #include "../include/parser.h"
 
-short int connected = 0;
-
-void parse_login(const char *msg) {
-    if (strstr(msg, "Could not resolve your hostname") != NULL) {
-        emscripten_run_script("login()");
-    } else if (strstr(msg, "Message of the day file is missing.") != NULL) {
-        irc_join_channel(irc);
-        connected = 1;
-    }
-}
 struct p_info parse_irc(char *msg) {
-    if (!connected)
-        parse_login(msg);
-
     struct p_info parsed_msg = {-1, "-", "-", "-", "-", "-", "-"};
 
     if (strstr(msg, "PRIVMSG") != NULL) {
@@ -28,6 +15,10 @@ struct p_info parse_irc(char *msg) {
         parsed_msg.flag = PING;
         strcpy(parsed_msg.command, strtok(msg, " "));
         strcpy(parsed_msg.msg, strtok(NULL, ":"));
+    } else if ((strstr(msg, "Could not resolve your hostname") != NULL)) {
+        parsed_msg.flag = LOGIN;
+    } else if (strstr(msg, "Message of the day file is missing.") != NULL) {
+        parsed_msg.flag = JOIN_CHAN;
     }
 
     printf("resulted struct: \n");

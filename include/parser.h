@@ -1,7 +1,6 @@
 #ifndef EMS_IRC
 #define EMS_IRC
 
-#include <emscripten/emscripten.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,9 +19,8 @@ struct p_info {
     char msg[1024];
 };
 
-enum COMMAND_FLAGS { PRIVMSG, PING, USER_LIST };
+enum COMMAND_FLAGS { PRIVMSG, PING, USER_LIST, LOGIN, JOIN_CHAN };
 
-void parse_login(const char *msg);
 struct p_info parse_irc(char *msg);
 
 #endif

@@ -42,6 +42,15 @@ EM_BOOL onmessage(int eventType, const EmscriptenWebSocketMessageEvent *websocke
         irc_pong(irc, parsed.msg);
         break;
 
+    case LOGIN:
+        emscripten_run_script("login()");
+
+        break;
+
+    case JOIN_CHAN:
+        irc_join_channel(irc);
+        break;
+
     default:
         break;
     }
