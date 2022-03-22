@@ -2,18 +2,6 @@
 
 short int connected = 0;
 
-int p_info_init(struct p_info *pi) {
-    if (pi == NULL)
-        pi = (struct p_info *)malloc(sizeof(struct p_info));
-    pi->flag = 0;
-    return 0;
-}
-
-int p_info_free(struct p_info *pi) {
-    free(pi);
-    return 0;
-}
-
 void parse_login(const char *msg) {
     if (strstr(msg, "Could not resolve your hostname") != NULL) {
         emscripten_run_script("login()");
@@ -22,69 +10,33 @@ void parse_login(const char *msg) {
         connected = 1;
     }
 }
-
-struct p_info *fill(const char *msg) {
-    struct p_info *parsed_msg;
-    p_info_init(parsed_msg);
-
-    char *token = (char *)malloc(sizeof(char) * strlen(msg));
-    char *copy_msg = (char *)malloc(sizeof(char) * strlen(msg));
-    strcpy(copy_msg, msg);
-    token = strtok(copy_msg, " ");
-    if (!strcmp(token, "PING")) {
-        irc_pong(irc, msg);
-        return NULL;
-    }
-
-    strcpy(copy_msg, msg);
-    if (strstr(token, "PRIVMSG") != NULL) {
-        strcpy(parsed_msg->who_nick, strtok(copy_msg + 1, "!"));
-        strcpy(parsed_msg->who_user, strtok(NULL, "@"));
-        strcpy(parsed_msg->who_server, strtok(NULL, " "));
-        strcpy(parsed_msg->command, strtok(NULL, " "));
-        strcpy(parsed_msg->channel, strtok(NULL, " "));
-        strcpy(parsed_msg->msg, strtok(NULL, ":"));
-    }
-
-    return parsed_msg;
-}
-
-int parse_irc(const char *msg) {
+struct p_info parse_irc(char *msg) {
     if (!connected)
         parse_login(msg);
 
-    struct p_info *parsed_msg = fill(msg);
+    struct p_info parsed_msg = {-1, "-", "-", "-", "-", "-", "-"};
 
-    if (!strcmp(parsed_msg->command, "PRIVMSG")) {
-        char recv_msg[256] = {'\0'};
-        strcat(recv_msg, "recv_msg(\"");
-        strcat(recv_msg, parsed_msg->msg);
-        strcat(recv_msg, "\")");
-        printf("%s\n", recv_msg);
-        emscripten_run_script(recv_msg);
+    if (strstr(msg, "PRIVMSG") != NULL) {
+        parsed_msg.flag = PRIVMSG;
+        strcpy(parsed_msg.who_nick, strtok(msg + 1, "!"));
+        strcpy(parsed_msg.who_user, strtok(NULL, "@"));
+        strcpy(parsed_msg.sever, strtok(NULL, " "));
+        strcpy(parsed_msg.command, strtok(NULL, " "));
+        strcpy(parsed_msg.channel, strtok(NULL, " "));
+        strcpy(parsed_msg.msg, strtok(NULL, ":"));
+    } else if (strstr(msg, "PING") != NULL) {
+        parsed_msg.flag = PING;
+        strcpy(parsed_msg.command, strtok(msg, " "));
+        strcpy(parsed_msg.msg, strtok(NULL, ":"));
     }
-    printf("%s\n", parsed_msg->msg);
 
-    p_info_free(parsed_msg);
-    return 0;
-}
+    printf("resulted struct: \n");
+    printf("who_nick   : .%s.\n", parsed_msg.who_nick);
+    printf("who_user   : .%s.\n", parsed_msg.who_user);
+    printf("sever      : .%s.\n", parsed_msg.sever);
+    printf("command    : .%s.\n", parsed_msg.command);
+    printf("channel    : .%s.\n", parsed_msg.channel);
+    printf("message    : .%s.\n", parsed_msg.msg);
 
-/**
- * @brief Copies from 'souce' to 'dest' from char 'from' until 'until' neither of which is included
- *
- * @param dest
- * @param source
- * @param from
- * @param until
- * @return void
- */
-void str_until_char(char *dest, const char *source, char from, char until) {
-    int aux = (char *)strchr(source, until) - (char *)strchr(source, from);
-    if (from != '\0')
-        strncpy(dest, strchr(source, from) + 1, aux - 1);
-    if (from == until) {
-        aux = (char *)strchr(source + 1, until) - (char *)strchr(source, from);
-        strncpy(dest, strchr(source, from) + 1, aux - 1);
-    } else
-        strncpy(dest, source, strchr(source, until) - source);
+    return parsed_msg;
 }

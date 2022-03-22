@@ -1,5 +1,12 @@
 #include "../include/ems_irc.h"
 
+/**
+ * @brief Emscripten websocket alternative to barkleys' socket send
+ *
+ * @param s socket
+ * @param msg message string sent as utf8_text
+ * @return int error code, if 0 then success
+ */
 int ems_send(int s, const char *msg) { return emscripten_websocket_send_utf8_text(s, msg); };
 
 /**
@@ -19,7 +26,7 @@ int irc_login(irc_t *irc) { return _irc_reg(irc->s, irc->nick, "u", "h", "f"); }
 int irc_join_channel(irc_t *irc) { return _irc_join(irc->s, irc->channel); }
 
 /**
- * @brief Asks user list of channel given irc settings
+ * @brief Asks channel's user list given irc settings
  *
  * @param irc irc_t
  * @return int return emscripten_websocket_send_utf8_text flag
@@ -27,9 +34,10 @@ int irc_join_channel(irc_t *irc) { return _irc_join(irc->s, irc->channel); }
 int irc_get_user_list(irc_t *irc) { return _irc_names(irc->s, irc->channel); }
 
 /**
- * @brief send privmsg given irc settings
+ * @brief send privmsg to channel given irc settings
  *
- * @param irc irc_t
+ * @param irc  irc_t
+ * @param msg  message to be sent
  * @return int return emscripten_websocket_send_utf8_text flag
  */
 int irc_send_msg(irc_t *irc, const char *msg) {
@@ -40,13 +48,13 @@ int irc_send_msg(irc_t *irc, const char *msg) {
 /**
  * @brief Responds to ping
  *
- * @param irc irc_t
- * @return int return emscripten_websocket_send_utf8_text flag
+ * @param irc irc_t settings
+ * @param server server to return ping to
+ * @return int
  */
-int irc_pong(irc_t *irc, const char *msg) {
-    char *serv = (char *)malloc(sizeof(msg));
-    strcpy(serv, msg + 6);
-    printf("pong to : %s\n", serv);
+int irc_pong(irc_t *irc, const char *server) {
+    char *serv = (char *)malloc(sizeof(server));
+    strcpy(serv, server + 6);
     return _irc_pong(irc->s, serv);
 }
 
@@ -81,6 +89,9 @@ int _irc_reg(int s, const char *nick, const char *user, const char *hostname, co
     EMSCRIPTEN_RESULT result;
     for (int i = 0; i < 2; i++) {
         result = ems_send(s, buf[i]);
+        if (result != 0) {
+            printf("%d - Error code %d :  _irc_reg", i, result);
+        }
     }
 
     return result;
@@ -140,6 +151,7 @@ int _irc_msg(int s, const char *channel, const char *data) {
     return ems_send(s, buf);
 }
 
+// irc_msg: For asking server list of usernames
 int _irc_names(int s, char *channel) {
     char *buf;
     size_t sz = snprintf(NULL, 0, "NAMES %s\r\n", channel);

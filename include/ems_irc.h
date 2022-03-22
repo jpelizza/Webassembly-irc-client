@@ -1,13 +1,10 @@
 #ifndef IRC_H
 #define IRC_H
 
-#include <emscripten.h>
 #include <emscripten/websocket.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
-#include <unistd.h>
 
 typedef struct {
     // structure info
@@ -15,9 +12,6 @@ typedef struct {
     // user info
     char *channel;
     char *nick;
-    // channel info
-    int chan_num_users;
-    char *chan_users;
 } irc_t;
 
 int ems_send(int s, const char *msg);
