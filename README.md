@@ -61,12 +61,12 @@ to access your python server such as:
 ##### In no particular order the next steps ares:
 
 + Use arguments to connect to the server on webassembly, using argc and argv is simples but I'm not yet sure on how to set arguments on JS's Module call yet. 
-+ Comment code.
++ ~~Comment code.~~
 + Build a better Makefile, right now it's a glorified static shell call.
 + Refactor parser
   - such as no more need for `parse_login`. 
-  - maybe set `fill`'s content to parse_irc
-  - take out `emscripten_run_script` out of parser, as it's supposed to only parse message into struct `p_info`, let all messages handling be made by `onmessage` or create another handler that responds if needed
+  - ~~maybe set `fill`'s content to parse_irc~~
+  - ~~take out `emscripten_run_script` out of parser, as it's supposed to only parse message into struct `p_info`, let all messages handling be made by `onmessage` or create another handler that responds if needed~~
 + Make a better user interface on html+js end.
 + Create simple test runs to facilitate future development
 
