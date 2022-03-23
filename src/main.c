@@ -44,7 +44,6 @@ EM_BOOL onmessage(int eventType, const EmscriptenWebSocketMessageEvent *websocke
 
     case LOGIN:
         emscripten_run_script("login()");
-
         break;
 
     case JOIN_CHAN:
@@ -52,6 +51,7 @@ EM_BOOL onmessage(int eventType, const EmscriptenWebSocketMessageEvent *websocke
         break;
 
     default:
+
         break;
     }
 

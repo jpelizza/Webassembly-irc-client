@@ -50,11 +50,11 @@ Run test.html on your browser and open console, as soon as you join a channel yo
 #### Debug
 If by any chance you get a CORS error then you'll have to explicitly enable CORS sharing, you can do that easly with [this python script](https://gist.github.com/khalidx/6d6ebcd66b6775dae41477cffaa601e5), now all you have to do is change on your test.html 
 ```js
-<script src="./wasm_irc.js">/*IMPORT*/</script>
+<script src="./bin/wasm_irc.js">/*IMPORT*/</script>
 ```
 to access your python server such as:
 ```js
-<script src="http:localhost:8000/wasm_irc.js">/*IMPORT*/</script>
+<script src="http:localhost:8000/bin/wasm_irc.js">/*IMPORT*/</script>
 ```
 ---
 ## TODO
@@ -62,11 +62,11 @@ to access your python server such as:
 
 + Use arguments to connect to the server on webassembly, using argc and argv is simples but I'm not yet sure on how to set arguments on JS's Module call yet. 
 + ~~Comment code.~~
-+ Build a better Makefile, right now it's a glorified static shell call.
++ ~~Build a better Makefile, right now it's a glorified static shell call~~.
 + Refactor parser
   - ~~such as no more need for `parse_login`~~. 
-  - ~~maybe set `fill`'s content to parse_irc~~
-  - ~~take out `emscripten_run_script` out of parser, as it's supposed to only parse message into struct `p_info`, let all messages handling be made by `onmessage` or create another handler that responds if needed~~
+  - ~~maybe set `fill`'s content to parse_irc~~.
+  - ~~take out `emscripten_run_script` out of parser, as it's supposed to only parse message into struct `p_info`, let all messages handling be made by `onmessage` or create another handler that responds if needed~~.
 + Make a better user interface on html+js end.
 + Create simple test runs to facilitate future development
 

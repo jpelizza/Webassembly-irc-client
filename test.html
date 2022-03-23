@@ -16,11 +16,11 @@
 
 </body>
 
-<script src="./wasm_irc.js">/*IMPORT*/</script>
+<script src="./bin/wasm_irc.js">/*IMPORT*/</script>
 <script>
   // STARTUP AND CONFIG
   channel = "#chan";
-  nickname = "nickname";
+  nickname = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 
   function login() {
     m.then((result) => {
