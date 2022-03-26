@@ -1,6 +1,6 @@
 #include "../include/js_interface.h"
 
-irc_t *irc = NULL;
+irc_t irc = {-1};
 
 /**
  * @brief Function should be called as soon as connection opens,
@@ -10,11 +10,7 @@ irc_t *irc = NULL;
  */
 void wsirc_socket_config(int w_socket) {
     // if already configured then ignores
-    if (irc != NULL)
-        return;
-    // else configures
-    irc = (irc_t *)malloc(sizeof(irc_t));
-    irc->s = w_socket;
+    irc.s = w_socket;
     return;
 }
 
@@ -27,10 +23,10 @@ void wsirc_socket_config(int w_socket) {
  * @return void
  */
 EMSCRIPTEN_KEEPALIVE void wsirc_config(const char *chan, const char *nick) {
-    irc->channel = (char *)malloc(sizeof(char) * strlen(chan) + 1);
-    irc->nick = (char *)malloc(sizeof(char) * strlen(nick) + 1);
-    strcpy(irc->nick, nick);
-    strcpy(irc->channel, chan);
+    irc.channel = (char *)malloc(sizeof(char) * strlen(chan) + 1);
+    irc.nick = (char *)malloc(sizeof(char) * strlen(nick) + 1);
+    strcpy(irc.nick, nick);
+    strcpy(irc.channel, chan);
     return;
 }
 
@@ -42,8 +38,8 @@ EMSCRIPTEN_KEEPALIVE void wsirc_config(const char *chan, const char *nick) {
  * @return void
  */
 EMSCRIPTEN_KEEPALIVE int wsirc_login() {
-    if (irc != NULL && irc->nick != NULL && irc->channel != NULL) {
-        printf("login %d\n", irc_login(irc));
+    if (irc.nick != NULL && irc.channel != NULL) {
+        printf("login %d\n", irc_login(&irc));
         return 0;
     }
     return 1;
@@ -55,6 +51,13 @@ EMSCRIPTEN_KEEPALIVE int wsirc_login() {
  * @param msg text string to be sent as utf_8
  * @return int result of emscripten_websocket_send_utf8_text, if 0 then successful
  */
-EMSCRIPTEN_KEEPALIVE int wsirc_send_msg(const char *msg) { return irc_send_msg(irc, msg); }
+EMSCRIPTEN_KEEPALIVE int wsirc_send_msg(const char *msg) { return irc_send_msg(&irc, msg); }
+
+/**
+ * @brief return websocket connection integer used on irc connection
+ *
+ * @return EMSCRIPTEN_KEEPALIVE
+ */
+EMSCRIPTEN_KEEPALIVE int wsirc_get_ws() { return irc.s; }
 
 // EMSCRIPTEN_KEEPALIVE const char *wsirc_get_users() { return ""; }

@@ -9,8 +9,12 @@ SOURCES  := $(SRC_DIR)/*.c
 
 TARGET := wasm_irc.js
 
-wasm_irc : main.o ems_irc.o js_interface.o parser.o 
+wasm_irc : folders main.o ems_irc.o js_interface.o parser.o
 	$(CC) $(OBJECTS)	$(CFLAGS) -o $(BUILD_DIR)/$(TARGET)
+
+folders:
+	[-d $(BIN_DIR) ] || mkdir -p $(BIN_DIR)
+	[-d $(BUILD_DIR) ] || mkdir -p $(BUILD_DIR)
 
 main.o: 
 	emcc -c $(SRC_DIR)/main.c -o $(BIN_DIR)/main.o 

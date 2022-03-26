@@ -7,7 +7,7 @@
 
 #include "ems_irc.h"
 
-extern irc_t *irc;
+extern irc_t irc;
 
 struct p_info {
     unsigned short flag;

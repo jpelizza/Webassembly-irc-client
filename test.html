@@ -5,73 +5,24 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <!--Load CSS-->
+  <link rel="stylesheet" href="./styles.css">
+
+  <title>Chat</title>
 </head>
 
-<body>
-  <ul id="list">
-  </ul>
-  <input type='text' id='idea' />
-  <input type='button' value='send' id='add' onclick="send_msg()" ; />
+<!--Load WebAssembly-->
+<script src="http://localhost:8000/build/wasm_irc.js">/*IMPORT*/</script>
 
-</body>
+<ul id="messages">
 
-<script src="./bin/wasm_irc.js">/*IMPORT*/</script>
-<script>
-  // STARTUP AND CONFIG
-  channel = "#chan";
-  nickname = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+</ul>
 
-  function login() {
-    m.then((result) => {
-      let id = setInterval(() => {
-        let i = result.ccall('wsirc_login', ["number"], [], []);
-        console.log(i)
-        config_conn(channel, nickname);
-        if (i == 0) clearInterval(id);
-      }, 1000);
-    })
-  }
+<input type="text" name="content" id="content">
+<input type='button' value='send' id='send' disabled="true" onclick="send_msg()" />
 
-  function config_conn(chan, nick) {
-    m.then((result) => {
-      result.ccall('wsirc_config', null, ["string", "string"], [chan, nick]);
-    })
-  }
-
-  async function init() {
-    const module = await Module();
-    return module;
-  }
-  const m = init();
-</script>
-
-<script>
-  // FUNCTIONS TO BE CALLED WHILE RUNNING
-  function send_msg(msg) {
-    m.then((result) => {
-      msg = document.getElementById('idea').value;
-      result.ccall('wsirc_send_msg', null, ["string"], [msg]);
-      recv_msg(msg);
-    })
-  }
-
-  function recv_msg(msg) {
-    var ul = document.getElementById("list");
-    var li = document.createElement("li");
-    li.appendChild(document.createTextNode(msg));
-    ul.appendChild(li);
-  }
-
-
-  function get_user_list() {
-    m.then((result) => {
-      result.ccall('wsirc_send_msg', ["string"], [], []);
-    })
-  }
-
-
-</script>
+<!--Load JS chat-->
+<script type="text/javascript" src="./chat.js"></script>
 
 
 </html>

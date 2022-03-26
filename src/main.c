@@ -33,25 +33,20 @@ EM_BOOL onmessage(int eventType, const EmscriptenWebSocketMessageEvent *websocke
     switch (parsed.flag) {
     case PRIVMSG:
         printf("PRIVMSG\n");
-        sprintf(ems_script, "recv_msg('%s')", parsed.msg);
+        sprintf(ems_script, "recv_msg('%s :%s')", parsed.who_nick, parsed.msg);
         emscripten_run_script(ems_script);
         break;
 
     case PING:
         printf("PING\n");
-        irc_pong(irc, parsed.msg);
-        break;
-
-    case LOGIN:
-        emscripten_run_script("login()");
+        irc_pong(&irc, parsed.msg);
         break;
 
     case JOIN_CHAN:
-        irc_join_channel(irc);
+        irc_join_channel(&irc);
         break;
 
     default:
-
         break;
     }
 

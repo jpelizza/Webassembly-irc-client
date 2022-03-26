@@ -15,19 +15,11 @@ struct p_info parse_irc(char *msg) {
         parsed_msg.flag = PING;
         strcpy(parsed_msg.command, strtok(msg, " "));
         strcpy(parsed_msg.msg, strtok(NULL, ":"));
-    } else if ((strstr(msg, "Could not resolve your hostname") != NULL)) {
-        parsed_msg.flag = LOGIN;
     } else if (strstr(msg, "Message of the day file is missing.") != NULL) {
         parsed_msg.flag = JOIN_CHAN;
+    } else {
+        printf("Non parsed message:\n%s\n", msg);
     }
-
-    printf("resulted struct: \n");
-    printf("who_nick   : .%s.\n", parsed_msg.who_nick);
-    printf("who_user   : .%s.\n", parsed_msg.who_user);
-    printf("sever      : .%s.\n", parsed_msg.sever);
-    printf("command    : .%s.\n", parsed_msg.command);
-    printf("channel    : .%s.\n", parsed_msg.channel);
-    printf("message    : .%s.\n", parsed_msg.msg);
 
     return parsed_msg;
 }

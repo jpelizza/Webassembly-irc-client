@@ -7,7 +7,7 @@
 #include "js_interface.h"
 #include "parser.h"
 
-extern irc_t *irc;
+extern irc_t irc;
 
 EM_BOOL onmessage(int eventType, const EmscriptenWebSocketMessageEvent *websocketEvent, void *userData);
 EM_BOOL onclose(int eventType, const EmscriptenWebSocketCloseEvent *websocketEvent, void *userData);
