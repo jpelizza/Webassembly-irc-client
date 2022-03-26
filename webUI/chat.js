@@ -5,6 +5,10 @@ let irc_ws = -1;
 const m = init();
 config_conn(channel, nickname);
 
+async function init() {
+  const module = await Module();
+  return module;
+}
 
 function config_conn(chan, nick) {
   m.then((result) => {
@@ -12,12 +16,6 @@ function config_conn(chan, nick) {
     login();
   })
 }
-
-async function init() {
-  const module = await Module();
-  return module;
-}
-
 
 function login() {
   m.then((result) => {
@@ -31,7 +29,6 @@ function login() {
     }, 1000);
   })
 }
-
 
 // FUNCTIONS TO BE CALLED WHILE RUNNING
 function send_msg(msg) {
