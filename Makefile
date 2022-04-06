@@ -1,5 +1,5 @@
 CC := emcc
-CFLAGS := -lwebsocket.js -s MODULARIZE -s EXPORTED_RUNTIME_METHODS=ccall -s PROXY_POSIX_SOCKETS=1
+CFLAGS := -lwebsocket.js -s MODULARIZE -s EXPORTED_RUNTIME_METHODS=[ccall] -s PROXY_POSIX_SOCKETS=1
 BIN_DIR := ./bin
 SRC_DIR := ./src
 BUILD_DIR := ./build

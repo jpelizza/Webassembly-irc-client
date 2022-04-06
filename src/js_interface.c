@@ -9,10 +9,15 @@ irc_t irc = {-1};
  * @param w_socket
  */
 void wsirc_socket_config(int w_socket) {
-    // if already configured then ignores
-    irc.s = w_socket;
-    return;
+  // if already configured then ignores
+  irc.s = w_socket;
+  return;
 }
+
+/**
+ * @brief Requests list of users on channel ','
+ */
+void wsirc_get_userlist() { irc_get_user_list(&irc); }
 
 /**
  * @brief This function is exported.
@@ -23,11 +28,11 @@ void wsirc_socket_config(int w_socket) {
  * @return void
  */
 EMSCRIPTEN_KEEPALIVE void wsirc_config(const char *chan, const char *nick) {
-    irc.channel = (char *)malloc(sizeof(char) * strlen(chan) + 1);
-    irc.nick = (char *)malloc(sizeof(char) * strlen(nick) + 1);
-    strcpy(irc.nick, nick);
-    strcpy(irc.channel, chan);
-    return;
+  irc.channel = (char *)malloc(sizeof(char) * strlen(chan) + 1);
+  irc.nick = (char *)malloc(sizeof(char) * strlen(nick) + 1);
+  strcpy(irc.nick, nick);
+  strcpy(irc.channel, chan);
+  return;
 }
 
 /**
@@ -38,20 +43,23 @@ EMSCRIPTEN_KEEPALIVE void wsirc_config(const char *chan, const char *nick) {
  * @return void
  */
 EMSCRIPTEN_KEEPALIVE int wsirc_login() {
-    if (irc.nick != NULL && irc.channel != NULL) {
-        printf("login %d\n", irc_login(&irc));
-        return 0;
-    }
-    return 1;
+  if (irc.nick != NULL && irc.channel != NULL) {
+    printf("login %d\n", irc_login(&irc));
+    return 0;
+  }
+  return 1;
 }
 
 /**
  * @brief This function is exported
  *
  * @param msg text string to be sent as utf_8
- * @return int result of emscripten_websocket_send_utf8_text, if 0 then successful
+ * @return int result of emscripten_websocket_send_utf8_text, if 0 then
+ * successful
  */
-EMSCRIPTEN_KEEPALIVE int wsirc_send_msg(const char *msg) { return irc_send_msg(&irc, msg); }
+EMSCRIPTEN_KEEPALIVE int wsirc_send_msg(const char *msg) {
+  return irc_send_msg(&irc, msg);
+}
 
 /**
  * @brief return websocket connection integer used on irc connection
